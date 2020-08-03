@@ -87,14 +87,16 @@ def examine_rdna_unit(REF, bufer, window, step):
 		sw12 = slideFunct(rdnadata2, window, step)
 	return sw12
 
-#main function
-def main():
+def examine(whole_genome_depth_profile, rdnastart, rdnaend, buffer1, rDNA_depth_profile, shoulder, window, step):
 	#examine the read depth across the whole of Chromosome XII
 	intercept = examine_whole_chromosome(whole_genome_depth_profile, rdnastart, rdnaend, buffer1, window, step)
 	#examine the read depth across the rDNA single unit, forcing the regression line to be horizontal
-	sw12 = examine_rdna_unit(rDNA_depth_profile, buffer2, window, step)
-	copyno = int(round(np.mean(sw12)/intercept))
-	print(copyno)
+	sw12 = examine_rdna_unit(rDNA_depth_profile, shoulder, window, step)
+	return int(round(np.mean(sw12)/intercept))
+
+#main function
+def main():
+  return examine(whole_genome_depth_profile, rdnastart, rdnaend, buffer1, rDNA_depth_profile, shoulder, window, step)
 
 if __name__ == "__main__":
 	whole_genome_depth_profile = sys.argv[1]	#whole genome depth profile text file
@@ -102,8 +104,7 @@ if __name__ == "__main__":
 	rdnaend =  int(sys.argv[3])				#rDNA end locus in whole genome
 	buffer1 = int(sys.argv[4])				#buffer between rDNA and non rDNA region
 	rDNA_depth_profile = sys.argv[5]		#depth profile of rDNA region only
-	buffer2 = int(sys.argv[6])				#its equal to shoulder size
+	shoulder = int(sys.argv[6])				#its equal to shoulder size
 	window = int(sys.argv[7])				#window size
 	step = int(sys.argv[8])				#step size
 	main()
-

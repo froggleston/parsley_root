@@ -3,14 +3,14 @@
 ##The program takes proportions as probabilities
 
 ##About rDNA structure
-
+[rdna_structure]
 Number of rDNA unit repeats: 150
 number of regions for non-coding zones: 4
 lower bound for each region: 3397	4644	8387	8906
 upper bound for each region: 4522	6586	8747	9137
 
 ##About variations
-
+[variation]
 Number of Variations: 30
 Size range of deletion in nonhomopolymeric region: 1	10
 Size range of insertion in nonhomopolymeric region: 1	10
@@ -26,24 +26,24 @@ Proportion of variation in noncoding zone: 0.90
 Proportion of deletion & insertion in homopolymeric region: 0.50
 
 ##parameters for partial variation beta distributions
-
+[distributions]
 alpha: 0.365
 beta: 0.818
 
 ##About input reference file
-
+[input_reference]
 Name and address of input reference fasta file: /home/ursani/programs/vg/S288c_rDNA_cracker.fasta
 First Coordinate of rDNA unit: 5614
 Last Coordinate of rDNA unit: 14750
 
 ##About output simulated vcf and genome files
-
+[vcf_output]
 Name and address of output simulated vcf file: variants.svcf
 Name and address of output simulated rDNA fasta file: genome.fasta
 Length of line of rDNA file: 60
 
 ##About output read files
-
+[read_output]
 Read Depth: 50
 SNP Error Rate: 0.001
 Read Filename prefix: sm

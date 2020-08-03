@@ -2,13 +2,13 @@
 import sys
 
 #function to trim fasta file
-def trim_fasta():
+def trim_fasta(orgFasta, trmFasta, locus_beg, locus_end):
 	info = []
-	(lenLine, numLines_beg, numLines_end, rem_beg, rem_end) = parameters()	#computing parameter
+	(lenLine, numLines_beg, numLines_end, rem_beg, rem_end) = parameters(orgFasta, locus_beg, locus_end)	#computing parameter
 	with open(orgFasta, 'r') as file_handle1:          		    #open original fasta file for reading
 		with open(trmFasta, 'w') as file_handle2:      		    #open trimmed fasta file for writing
 			count_lines = 0                                     #counting lines in original file
-			count_seq = 0                                       #count sequence number of locus within line                                 
+			count_seq = 0                                       #count sequence number of locus within line
 			lineseg = ''                                        #initializing the line segment of trimmed fasta file
 			for line in file_handle1:                           #loop of the lines in the original file
 				if line.startswith('>'):                    #condition to identify first line of fasta
@@ -62,7 +62,7 @@ def compute_coordinates(line):
 	return (lineseg1, lineseg2, locus_nr_init_trm, locus_nr_fnl_trm)
 
 #function to compute parameters of the DNA sequence
-def parameters():
+def parameters(orgFasta, locus_beg, locus_end):
 	with open(orgFasta, 'r') as file_handle1:      #open original fasta file for reading
 		lenLine = lengthOfLine(file_handle1)       #length of a line in an original fasta file
 		numLines_beg = int(locus_beg/lenLine) + 1  #line number in original file where beginner locus of trimmed file exists
@@ -81,7 +81,7 @@ def parameters():
 #function to write DNA sequence in a trimmed file
 def file_writing(file_handle2, line, lineseg, locus, count_seq, lenLine, info):
 	lineseg += line[locus]                              #adding DNA locus to line segment
-	count_seq += 1                                      #incrementing sequence number counter of the line segment 
+	count_seq += 1                                      #incrementing sequence number counter of the line segment
 	if(count_seq == lenLine):                           #if counter achieves the full length of line
 		file_handle2.write(lineseg+'\n')                #write on the trimmed file
 		info.append(lineseg+'\n')			#for file stream
@@ -97,7 +97,7 @@ def lengthOfLine(file_handle1):
 		return len(line) - 1
 
 def main():
-	trim_fasta()
+	trim_fasta(orgFasta, trmFasta, locus_beg, locus_end)
   
 if __name__ == "__main__":
 	locus_beg = int(sys.argv[3])	#begining locus
