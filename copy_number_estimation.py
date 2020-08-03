@@ -27,7 +27,7 @@ def max_line_length(infile):
 
 def copy_number_estimator(config):
   cne_ref_params = config['cne_ref_params']
-	whole_genome_ref = cne_ref_params['Name and address of whole genome fasta file']		#whole genome fasta file
+  whole_genome_ref = cne_ref_params['Name and address of whole genome fasta file']		#whole genome fasta file
   rDNA_start_locus = int(cne_ref_params['rDNA start locus number'])		#start locus of rDNA in whole genomw fasta file
   rDNA_end_locus = int(cne_ref_params['rDNA end locus number'])		#end locus of rDNA in whole genomw fasta file
   rDNA_buffer = int(cne_ref_params['buffer between rDNA and non-rDNA region'])		#buffer between rDNA and non rDNA
@@ -45,7 +45,7 @@ def copy_number_estimator(config):
   window_size = int(cne_slide_params['window size'])		#window size for computing average read depth
   step_size = int(cne_slide_params['step size'])		#step size for computing average read depth
 
-	#change files to linux format
+  #change files to linux format
   with open('rDNA_fixed.fasta', 'w') as rDNA_fixedfile:
     with open(rDNA_ref) as rdna_ref_file:
       for line in rdna_ref_file:
@@ -56,9 +56,9 @@ def copy_number_estimator(config):
     with open(whole_genome_ref) as wg_ref_file:
       for line in wg_ref_file:
         line.replace('\r\n', '\n')
-				whole_genome_fixedfile.write(line)
+        whole_genome_fixedfile.write(line)
 
-	#find maximum read length
+  #find maximum read length
   max_read_length_fwd = max_line_length(fwd_reads_file)   #maximum read length in forward read file
   max_read_length_rvs = max_line_length(rvs_reads_file)   #maximum read length in reverse read file
 
@@ -79,7 +79,7 @@ def copy_number_estimator(config):
   devnull = open(os.devnull, 'w')
   with open ('rDNA_samfile.sam', 'w') as rDNA_samfile:
     subprocess.Popen(['bwa', 'mem', 'rDNA_trm.fasta', fwd_reads_file, rvs_reads_file], stdout=rDNA_samfile, stderr=devnull)	#to suppress screen output
-	with open ('whole_genome_samfile.sam', 'w') as whole_genome_samfile:
+  with open ('whole_genome_samfile.sam', 'w') as whole_genome_samfile:
     subprocess.Popen(['bwa', 'mem', 'whole_genome_fixed.fasta', fwd_reads_file, rvs_reads_file], stdout=whole_genome_samfile, stderr=devnull).wait()
 
   #sam to bam
@@ -100,9 +100,9 @@ def copy_number_estimator(config):
   with open ('whole_genome_depth.txt', 'w') as whole_genome_depthfile:
     subprocess.Popen(['samtools', 'depth', '-aa', 'whole_genome_bamsort.bam'], stdout=whole_genome_depthfile, stderr=subprocess.PIPE).wait()
 
-	#copy number estimate
-	#copy_number_estimate = subprocess.Popen(['python3.6', 'copyno.py', 'whole_genome_depth.txt', '{0}'.format(rDNA_start_locus), '{0}'.format(rDNA_end_locus), '{0}'.format(rDNA_buffer), 'rDNA_depth.txt', '{0}'.format(shoulder_size), '{0}'.format(window_size), '{0}'.format(step_size)], stdout=subprocess.PIPE)
-	#copy_number_estimate = copy_number_estimate.stdout.readlines()
+  #copy number estimate
+  #copy_number_estimate = subprocess.Popen(['python3.6', 'copyno.py', 'whole_genome_depth.txt', '{0}'.format(rDNA_start_locus), '{0}'.format(rDNA_end_locus), '{0}'.format(rDNA_buffer), 'rDNA_depth.txt', '{0}'.format(shoulder_size), '{0}'.format(window_size), '{0}'.format(step_size)], stdout=subprocess.PIPE)
+  #copy_number_estimate = copy_number_estimate.stdout.readlines()
   copy_number_estimate = examine('whole_genome_depth.txt', rDNA_start_locus, rDNA_end_locus, rDNA_buffer, 'rDNA_depth.txt', shoulder_size, window_size, step_size)
   return copy_number_estimate
 
